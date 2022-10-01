@@ -1,0 +1,93 @@
+
+--- Inspecting data
+
+SELECT * FROM sales_data_sample 
+
+
+----- Checking unique values
+
+SELECT DISTINCT status FROM sales_data_sample  --  Nice to plot 
+SELECT DISTINCT year_id FROM sales_data_sample
+SELECT DISTINCT productline FROM sales_data_sample --- Nice to plot
+SELECT DISTINCT country FROM sales_data_sample  --- Nice to plot
+SELECT DISTINCT dealsize FROM sales_data_sample  -- Nice to plot 
+SELECT DISTINCT territory FROM sales_data_sample --- Nice to plot 
+
+--- Analysis
+--- Grouping sales by productline
+
+select PRODUCTLINE, sum(sales) Revenue
+from sales_data_sample
+group by PRODUCTLINE
+order by 2 desc
+ 
+select year_id, sum(sales) Revenue
+from sales_data_sample
+group by PRODUCTLINE
+order by 2 desc
+
+
+select YEAR_ID, sum(sales) Revenue
+from sales_data_sample
+group by YEAR_ID
+order by 2 desc
+
+select  DEALSIZE,  sum(sales) Revenue
+from sales_data_sample
+group by  DEALSIZE
+order by 2 desc
+
+----What was the best month for sales in a specific year? How much was earned that month? 
+
+select  MONTH_ID, sum(sales) Revenue, count(ORDERNUMBER) Frequency
+from sales_data_sample
+where YEAR_ID = 2004 
+group by  MONTH_ID
+order by 2 desc
+
+--What product is being sold in November
+
+select  MONTH_ID, PRODUCTLINE, sum(sales) Revenue, count(ORDERNUMBER)
+from sales_data_sample
+where YEAR_ID = 2004 and MONTH_ID = 11 
+group by  MONTH_ID, PRODUCTLINE
+order by 3 desc
+
+----Who is the best customer
+
+select CUSTOMERNAME, 
+sum(sales) MonetaryValue,
+avg(sales) AvgMonetaryValue,
+count(ordernumber) Frequency,
+max(orderdate) last_order_date,
+(select max(orderdate) from sales_data_sample) max_order_date
+FROM sales_data_sample
+GROUP BY customername  
+
+
+----What products are most often sold together? 
+
+select * from sales_data_sample
+where ORDERNUMBER =  10411
+
+
+--What city has the highest number of sales in a specific country
+
+select city, sum(sales) Revenue
+from sales_data_sample
+where country = 'UK'
+group by city
+order by 2 desc
+
+
+---What is the best product in United States?
+
+select country, YEAR_ID, PRODUCTLINE, sum(sales) Revenue
+from sales_data_sample
+where country = 'USA'
+group by  country, YEAR_ID, PRODUCTLINE
+order by 4 desc
+
+
+
+
